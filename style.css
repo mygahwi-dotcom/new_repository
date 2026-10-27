@@ -1,0 +1,217 @@
+/* 브라우저의 기본 여백을 없앱니다. */
+body { margin: 0; background: #005471; }
+/* 포스터를 화면 전체에 놓고, 밖으로 나간 문은 숨깁니다. */
+.poster { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+/* 모든 이미지에 같은 크기와 위치 기준을 적용합니다. */
+.scene, .door img { width: 100vw; height: 100vh; object-fit: cover; }
+.scene { display: block; }
+/* 문 한 장의 너비는 화면의 절반입니다. */
+.door { position: absolute; top: 0; width: 50%; height: 100%; overflow: hidden;
+    transition: transform 2.4s ease-in-out; }
+.left { left: 0; }
+.right { right: 0; }
+/* 왼쪽 문은 이미지 왼쪽을, 오른쪽 문은 이미지 오른쪽을 보여줍니다. */
+.door img { position: absolute; top: 0; max-width: none; }
+.left img { left: 0; }
+.right img { right: 0; }
+/* open 클래스가 붙으면 각 문이 자기 너비만큼 옆으로 이동합니다. */
+.open .left { transform: translateX(-100%); }
+.open .right { transform: translateX(100%); }
+/* 투명한 클릭 영역입니다. */
+.open-button { position: absolute; inset: 0; width: 100%; height: 100%;
+    padding: 0; border: 0; background: transparent; cursor: pointer; }
+.open-button:focus-visible { outline: 2px solid #fff0ce; outline-offset: -7px; }
+.open .open-button { display: none; }
+/* 문이 열린 동안 화면 양옆 40px을 투명한 닫기 영역으로 사용합니다. */
+.close-edge { position: absolute; top: 0; width: 40px; height: 100%;
+    padding: 0; border: 0; background: transparent; cursor: pointer; }
+.edge-left { left: 0; }
+.edge-right { right: 0; }
+.close-edge:focus-visible { outline: 2px solid #fff0ce; outline-offset: -3px; }
+@media (prefers-reduced-motion: reduce) { .door { transition-duration: .01s; } }
+
+
+/* 꽃은 인물 위, 문 아래에 놓입니다. 원본 이미지와 같은 비율입니다. */
+.flower-stage { position: absolute; left: 50%; top: 50%;
+    width: max(100vw, 177.6833vh); height: max(100vh, 56.2799vw);
+    transform: translate(-50%, -50%); pointer-events: none; }
+.flower { position: absolute; }
+.flower img { display: block; width: 100%; opacity: 0; transform: scale(0); }
+/* 문이 절반 열린 1.2초 시점에 모든 꽃이 함께 피기 시작합니다. */
+.bloom .flower img { animation: bloom-right 1.3s ease-out both; }
+.bloom .flower:nth-child(even) img { animation-name: bloom-left; }
+.flower-1 { left: -4%; top: 13%; width: 19%; transform: rotate(-15deg); }
+.flower-2 { left: 17%; top: -12%; width: 15%; transform: rotate(8deg); }
+.flower-3 { left: 73%; top: 25%; width: 17%; transform: rotate(-15deg); }
+.flower-4 { left: 87%; top: 45%; width: 20%; transform: rotate(12deg); }
+.flower-5 { left: -3%; top: 44%; width: 17%; transform: rotate(-15deg); }
+.flower-9 { left: -8%; top: 35%; width: 17%; transform: rotate(20deg); }
+.flower-11 { left: 10%; top: 7%; width: 18%; transform: rotate(-22deg); }
+.flower-12 { left: 76%; top: 8%; width: 19%; transform: rotate(20deg); }
+.flower-13 { left: 5%; top: 26%; width: 20%; transform: rotate(-16deg); }
+.flower-14 { left: 78%; top: 24%; width: 24%; transform: rotate(14deg); }
+.flower-15 { left: 47%; top: -28%; width: 25%; transform: rotate(8deg); }
+.flower-16 { left: 60%; top: -12%; width: 18%; transform: rotate(-15deg); }
+.flower-17 { left: -5%; top: -9%; width: 27%; transform: rotate(-18deg); }
+.flower-18 { left: 82%; top: -12%; width: 27%; transform: rotate(25deg); }
+.flower-19 { left: 6%; top: -17%; width: 21%; transform: rotate(35deg); }
+
+@keyframes bloom-right {
+    from { opacity: 1; transform: scale(.03) rotate(-105deg); }
+    15% { opacity: 1; }
+    to { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes bloom-left {
+    from { opacity: 1; transform: scale(.03) rotate(85deg); }
+    15% { opacity: 1; }
+    to { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+/* 문이 닫히는 동안 꽃은 다 핀 상태로 그대로 남아 있습니다. */
+.settled .flower img { animation: none; opacity: 1; transform: scale(1); }
+/* 문이 완전히 닫힌 뒤에 다시 열 수 있습니다. */
+.closing .open-button { display: none; }
+@media (prefers-reduced-motion: reduce) {
+    .bloom .flower img { animation-delay: 0s; animation-duration: .01s; }
+}
+
+/* 오른쪽 꽃 사이의 빈 곳을 작은 꽃 세 무리로 채웁니다. */
+
+/* 왼쪽 가장자리에는 꽃을 겹쳐 놓아 틈이 생기지 않게 합니다. */
+.flower-23 { left: -7%; top: 21%; width: 18%; transform: rotate(24deg); }
+.flower-25 { left: -8%; top: 7%; width: 19%; transform: rotate(18deg); }
+
+/* 빨간 표시의 오른쪽 위와 바깥쪽 빈 공간을 채웁니다. */
+.flower-26 { left: 77%; top: -6%; width: 14%; transform: rotate(12deg); }
+.flower-27 { left: 89%; top: 15%; width: 16%; transform: rotate(-24deg); }
+
+/* 사용자가 짜집기한 구도: 주황 꽃의 형태를 섞고 보라 꽃으로 사이를 채웁니다. */
+.flower-28 { left: 68%; top: 5%; width: 18%; transform: rotate(20deg); }
+.flower-29 { left: -3%; top: 49%; width: 17%; transform: rotate(-20deg); }
+.flower-30 { left: -6%; top: 60%; width: 17%; transform: rotate(10deg); }
+.flower-31 { left: 90%; top: 61%; width: 15%; transform: rotate(22deg); }
+.flower-32 { left: 96%; top: 62%; width: 15%; transform: rotate(-30deg); }
+.flower-34 { left: -2%; top: 34%; width: 17%; transform: rotate(-25deg); }
+
+/* 빨간 표시의 위쪽과 왼쪽 꽃 사이를 채웁니다. */
+.flower-35 { left: 37%; top: -19%; width: 19%; transform: rotate(12deg); }
+.flower-36 { left: 15%; top: 22%; width: 13%; transform: rotate(-10deg); }
+
+/* 뱀도 꽃과 동일한 원본 좌표 안에서 움직입니다. */
+.snake-stage { position: absolute; left: 50%; top: 50%;
+    width: max(100vw, 177.6833vh); height: max(100vh, 56.2799vw);
+    transform: translate(-50%, -50%); pointer-events: none; }
+/* 인물 얼굴과 나비핀에는 뱀이 겹치지 않도록 가장자리만 보입니다. */
+.snake-body { overflow: hidden; mask-image: url('snake-visible.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
+/* 뱀의 몸은 한 화면 안에서 이어지도록 그립니다. */
+.snake-canvas { display: block; width: 100%; height: 100%; }
+
+.bloom .snake-front-flowers .flower-28 img { animation-name: bloom-right; }
+
+.character-cover { position: absolute; left: 50%; top: 50%;
+    width: max(100vw, 177.6833vh); height: max(100vh, 56.2799vw);
+    transform: translate(-50%, -50%); pointer-events: none; }
+
+/* 꽃잎도 배경과 같은 좌표를 사용합니다. */
+.petal-stage { position: absolute; left: 50%; top: 50%;
+    width: max(100vw, 177.6833vh); height: max(100vh, 56.2799vw);
+    transform: translate(-50%, -50%); pointer-events: none; }
+.petal { position: absolute; width: var(--size); opacity: 0; }
+.petal img { display: block; width: 100%; }
+/* 서로 다른 시간과 방향으로, 바람에 밀리듯 내려옵니다. */
+.bloom .petal { animation: petal-fall var(--time) linear var(--delay) infinite both; }
+.bloom .petal img { animation: petal-turn 3.8s ease-in-out infinite alternate; }
+.bloom .petal:nth-child(even) img { animation-direction: alternate-reverse; }
+@keyframes petal-fall {
+    0% { opacity: 0; transform: translate(0, 0) rotate(-20deg); }
+    9% { opacity: .9; }
+    30% { transform: translate(calc(var(--drift) * .45 + 25px), 19vh) rotate(55deg); }
+    55% { opacity: .9; transform: translate(calc(var(--drift) * .6 - 20px), 38vh) rotate(120deg); }
+    80% { opacity: .75; transform: translate(calc(var(--drift) * .9 + 15px), 59vh) rotate(200deg); }
+    100% { opacity: 0; transform: translate(var(--drift), 78vh) rotate(260deg); }
+}
+@keyframes petal-turn {
+    from { transform: rotateY(-45deg) rotate(-12deg); }
+    to { transform: rotateY(60deg) rotate(22deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .bloom .petal, .bloom .petal img { animation: none; }
+}
+
+/* 원본과 같은 좌표로 겹쳐 머리카락 부분만 아주 미세하게 흔듭니다. */
+.hair-breeze { position: absolute; left: 50%; top: 50%;
+    width: max(100vw, 177.6833vh); height: max(100vh, 56.2799vw);
+    transform: translate(-50%, -50%); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .hair-breeze { display: none; } }
+
+/* 물결 변형 없이, 위쪽을 축으로 머리카락을 조금씩 좌우로 흔듭니다. */
+.hair-swing { transform-origin: 836px 30px; }
+.bloom .hair-swing { animation: hair-swing 7s ease-in-out infinite; }
+@keyframes hair-swing {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(1.4deg); }
+    75% { transform: rotate(-1.4deg); }
+}
+/* 피어나는 동작은 안쪽 이미지, 바람은 바깥쪽 요소가 맡습니다. */
+.flower-wind { display: block; transform-origin: center; }
+.bloom .flower-wind {
+    animation: flower-sway var(--wind-time) ease-in-out var(--wind-delay) infinite both;
+}
+@keyframes flower-sway {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(var(--wind-angle)); }
+    75% { transform: rotate(calc(var(--wind-angle) * -1)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bloom .hair-swing, .bloom .flower-wind { animation: none; }
+}
+
+/* 원본 색에서 추출한 머리카락 영역만 사용하고 경계는 부드럽게 연결합니다. */
+.hair-cutout { width: 100%; height: 100%;
+    mask-image: url('hair-only.svg'); mask-size: 100% 100%; mask-repeat: no-repeat;
+    transform-origin: 50% 3.2%; }
+.hair-cutout img { display: block; width: 100%; height: 100%; }
+
+.poster-title { position: absolute; left: 50%; top: 50%;
+    width: max(100vw, 177.6833vh); height: max(100vh, 56.2799vw);
+    transform: translate(-50%, -50%); pointer-events: none; }
+.title-stroke { fill: none; stroke: white; stroke-width: 18;
+    stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; }
+.bloom .title-stroke { animation: brush-write .46s ease-in-out var(--write-delay) both; }
+@keyframes brush-write { 0% { opacity: 0; stroke-dashoffset: 1; } 1% { opacity: 1; } 100% { opacity: 1; stroke-dashoffset: 0; } }
+.english-info { opacity: 0; }
+.bloom .english-info { animation: information-appear 1.8s ease-out 8.7s both; }
+@keyframes information-appear { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+    .bloom .title-stroke { animation-delay: 0s; animation-duration: .01s; }
+    .bloom .english-info { animation-delay: 0s; animation-duration: .01s; }
+}
+
+/* 고정된 원본 꽃 영역에는 움직이는 머리카락이 침범하지 않게 보호합니다. */
+.hair-breeze { mask-image: url('hair-only.svg'); mask-size: 100% 100%; mask-repeat: no-repeat; }
+
+@font-face { font-family: PosterBook; src: url("poster-book.otf") format("opentype"); font-weight: 300; font-style: normal; font-display: block; }
+.english-info text { font-weight: 300; }
+
+/* PDF의 좌표와 같은 비율로 인물을 놓습니다. */
+@font-face { font-family: GapyeongHanseokbongLight; src: url("gapyeong-hanseokbong-light.woff2") format("woff2"); font-weight: 300; font-display: block; }
+.character-stage, .title-actions { position: absolute; left: 50%; top: 50%;
+    width: max(100vw, 177.6833vh); height: max(100vh, 56.2799vw);
+    transform: translate(-50%, -50%); pointer-events: none; }
+.character-group { position: absolute; inset: 0; opacity: 0; visibility: hidden;
+    transition: opacity 1.6s ease-out, visibility 1.6s; }
+.character-group.revealed { opacity: 1; visibility: visible; }
+.character-group img { position: absolute; height: auto; }
+.character-group svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.character-group text { fill: #FCE7D3; font-family: GapyeongHanseokbongLight, serif; font-weight: 300; font-size: 102px; }
+/* 색 네모 대신 투명한 버튼으로 클릭 범위만 만듭니다. */
+.title-actions { visibility: hidden; }
+.bloom.open .title-actions { animation: enable-title 0s 8.7s forwards; }
+@keyframes enable-title { to { visibility: visible; } }
+.title-hit { position: absolute; padding: 0; border: 0; background: transparent;
+    pointer-events: auto; cursor: pointer; }
+.title-hit:focus-visible { outline: 1px solid #FCE7D3; outline-offset: -4px; }
+@media (prefers-reduced-motion: reduce) {
+    .character-group { transition-duration: .01s; }
+    .bloom.open .title-actions { animation-delay: 0s; }
+}
